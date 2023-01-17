@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head tag -->
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Title -->
+  
+  <title>procedural locomotion System - Jiayu He</title>
+
+  <!--Favicon-->
+  <link rel="icon" href="favicon/favicon.ico">
+
+  <!--Description-->
+  
+      <meta name="description" content="An Universal Solution for Procedural LocomotionDuring Thanksgiving of 2022, I was thinking about making an independent game with various robots in a d">
+  
+
+  <!--Author-->
+  
+      <meta name="author" content="Jiayu He">
+  
+
+  <!-- Pure CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans:300,800" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+  	<div class="container-fluid navbar-container m-sm-5">
+      <!-- Header -->
+      <nav class="navbar navbar-toggleable-sm navbar-light px-1 py-3 my-3 mb-sm-5">
+  <a class="navbar-brand ml-2" href="/">Jiayu He</a>
+  <button class="navbar-toggler navbar-toggler-right py-2" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse text-center" id="navbarCollapse">
+    <ul class="navbar-nav ml-auto my-auto">
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/reel">Reel</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" rel="noopener" href="https://www.instagram.com/jiayuhe511/">Instagram</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" rel="noopener" href="https://www.linkedin.com/in/jiayu-he-389213145/">LinkedIn</a>
+        </li>
+      
+    </ul>
+    <hr class="hidden-md-up" />
+  </div>
+</nav>
+
+
+  		<div class="row">
+  			<div class="col-lg-4 col-12 pt-3 px-4 pr-lg-5">
+  <h1>procedural locomotion System</h1>
+</div>
+<div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="An-Universal-Solution-for-Procedural-Locomotion"><a href="#An-Universal-Solution-for-Procedural-Locomotion" class="headerlink" title="An Universal Solution for Procedural Locomotion"></a>An Universal Solution for Procedural Locomotion</h1><p>During Thanksgiving of 2022, I was thinking about making an independent game with various robots in a deprecated planet. While suffering from a bulk of animation sequence required for each type of robots locomotion, I am thinking about developing an universal procedural solution for it. </p>
+<p>Since only few people actually dive deep into this topic after searching around, I hope this essay could be helpful :)  </p>
+<p><strong>After weeks of experiment, the final result could satisfy the following requirements:</strong></p>
+<ol>
+<li><em>coping with any rig systems, including unsymmetrical rigs.</em></li>
+<li><em>coping with any terrain conditions.</em></li>
+<li><em>dynamic transition from different velocity input.</em></li>
+</ol>
+<p>The project was written in Unity C#.</p>
+<hr>
+<p>Here is the framework of algorithm.</p>
+<div id="animated-thumbnails">
+    <a href="/images/IllusoryMe1.jpg">
+        <a href="/images/locomotion/procedural_locomotion.drawio.png" class="gallery-item"><img  src="/images/locomotion/procedural_locomotion.drawio.png" /></a>
+    </a>
+</div>
+
+<p>1) Prediction</p>
+<p>Prediction system is to check if there exist legs that need to move given locomotion instruction. </p>
+<p>The algorithm is predicting the future location of each foot within a period. And if there exists the legs that prediction is far enough. Then set to body status from “Static” to “Move” and start scheduling “How to move legs”</p>
+<p>(there are different ways of checking whether legs have to move or not, like the one made by <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=AChwSWU4AaU&amp;t=2s"> </a>)</p>
+<p>2) How to move legs?</p>
+<p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”. </p>
+<div id="animated-thumbnails">
+    <a href="/images/IllusoryMe1.jpg">
+        <a href="/images/locomotion/locomotionCycle.png" class="gallery-item"><img  src="/images/locomotion/locomotionCycle.png" /></a>
+    </a>
+</div>
+
+<p>and here is the comparison between running and walking for biped rig.</p>
+<div id="animated-thumbnails">
+    <a href="/images/IllusoryMe1.jpg">
+        <a href="/images/locomotion/running_walking.png" class="gallery-item"><img  src="/images/locomotion/running_walking.png" /></a>
+    </a>
+</div>
+</div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
+        var options = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options);
+        }</script>
+</div>
+
+
+      </div>
+      
+  	</div>
+
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
