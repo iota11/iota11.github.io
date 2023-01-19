@@ -41,7 +41,119 @@
   <!-- Google Analytics -->
   
 
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 
   <body>
@@ -97,7 +209,7 @@
 <p>The project was written in Unity C#. </p>
 <hr>
 <h3 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h3><p>Here is the framework of algorithm.   </p>
-<p><a href="image-20230119023245286.png" title="image-20230119023245286" class="gallery-item"><img src="image-20230119023245286.png" alt="image-20230119023245286" style="zoom: 50%;" /></a></p>
+<p><a href="image-20230119023245286.png" title="image-20230119023245286" class="gallery-item"><img src="image-20230119023245286.png" alt="image-20230119023245286" style="zoom: 50%;"></a></p>
 <p>So intuitively speaking, I want to break the process into three parts:</p>
 <ol>
 <li><strong>Body Prediction</strong></li>
@@ -111,9 +223,9 @@
 <p>there are different ways of checking whether legs have to move or not, like the one made by checking gravity center, but from my perspective, measuring center of gravity cannot describe the motivation for legs movement, like rotating and acceleration. Measuring it from each legs perspective seems to be most practical.</p>
 <hr>
 <h3 id="2-Body-Coordination"><a href="#2-Body-Coordination" class="headerlink" title="2. Body Coordination"></a>2. Body Coordination</h3><h4 id="Coordination-between-different-rig-system"><a href="#Coordination-between-different-rig-system" class="headerlink" title="Coordination between different rig system"></a>Coordination between different rig system</h4><p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”.  I break each legs in “period” into two phase “Time_moving” and “Time_stop”, which “Time_moving” describe the phase when legs are moving in the air, and “Time_stop” describe the phase when feet on the ground supporting the body.</p>
-<p><a href="image-20230119025544332.png" title="image-20230119025544332" class="gallery-item"><img src="image-20230119025544332.png" alt="image-20230119025544332" style="zoom:50%;" /></a></p>
+<p><a href="image-20230119025544332.png" title="image-20230119025544332" class="gallery-item"><img src="image-20230119025544332.png" alt="image-20230119025544332" style="zoom:50%;"></a></p>
 <h4 id="Coordination-between-different-velocity"><a href="#Coordination-between-different-velocity" class="headerlink" title="Coordination between different velocity"></a>Coordination between different velocity</h4><p>Here is the comparison between running and walking for biped rig. As you can see the difference that in running circle there is a period that both legs are in the air. we call it as “Time_in_air”. Since creatures are actually dropping with gravity in “Time_in_air”, the period is actually really small on earth, around 0.1- 0.3s max.</p>
-<p><a href="image-20230119030008218.png" title="image-20230119030008218" class="gallery-item"><img src="image-20230119030008218.png" alt="image-20230119030008218" style="zoom:50%;" /></a></p>
+<p><a href="image-20230119030008218.png" title="image-20230119030008218" class="gallery-item"><img src="image-20230119030008218.png" alt="image-20230119030008218" style="zoom:50%;"></a></p>
 <h4 id="Coordination-Algorithm"><a href="#Coordination-Algorithm" class="headerlink" title="Coordination Algorithm"></a>Coordination Algorithm</h4><p>So the algorithm is pretty simple. Once we start to cycle the sequence, if a leg meets the trigger time:<br>1)Find the predicted destination.<br>2)Start to move to the destination in “Move Time”.</p>
 <p>But how should we coordinate velocity and period? We all know that when running fast, the period is much shorter than walking one. The key to answer this is that “Time_stop” is the only relevant to “Velocity”and “Leg length”. Think about what happened during the “Time_stop”? Our body moves from backmost to front most, in “Speed” and “Stall Time”, right?<br>So We can conclude that:</p>
 <script type="math/tex; mode=display">
@@ -121,7 +233,7 @@
 T_{\text {stop }} \times V_{\text {body }} & =L_{\text {stride }} \\
 T_{\text {stop }} & =\frac{L_{\text {stride }}}{V_{\text {body }}} \\
 \end{aligned}</script><p>Then how do we know period? Suppose “Time_in_air” is constant around 0.1s (we are all ruled by gravity). Which means that the starting time of last leg should be no longer than the end of first leg moving plus Time in air. </p>
-<p><a href="image-20230119031745591.png" title="image-20230119031745591" class="gallery-item"><img src="image-20230119031745591.png" alt="image-20230119031745591" style="zoom:67%;" /></a></p>
+<p><a href="image-20230119031745591.png" title="image-20230119031745591" class="gallery-item"><img src="image-20230119031745591.png" alt="image-20230119031745591" style="zoom:67%;"></a></p>
 <p>We could say that:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}T_{\text {stop }}+T_{\text {in air }} & =\frac{T_{\text {period }}}\\
