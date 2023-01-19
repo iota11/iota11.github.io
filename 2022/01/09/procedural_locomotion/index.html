@@ -94,33 +94,31 @@
 <li><em>coping with any terrain conditions.</em></li>
 <li><em>dynamic transition from different velocity input.</em></li>
 </ol>
-<p>The project was written in Unity C#.</p>
+<p>The project was written in Unity C#. </p>
 <hr>
-<p>Here is the framework of algorithm.</p>
-<div id="animated-thumbnails">
-    <a href="/images/IllusoryMe1.jpg">
-        <a href="/images/locomotion/procedural_locomotion.drawio.png" class="gallery-item"><img  src="/images/locomotion/procedural_locomotion.drawio.png" /></a>
-    </a>
-</div>
-
-<p>1) Prediction</p>
-<p>Prediction system is to check if there exist legs that need to move given locomotion instruction. </p>
-<p>The algorithm is predicting the future location of each foot within a period. And if there exists the legs that prediction is far enough. Then set to body status from “Static” to “Move” and start scheduling “How to move legs”</p>
-<p>(there are different ways of checking whether legs have to move or not, like the one made by <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=AChwSWU4AaU&amp;t=2s"> </a>)</p>
+<h3 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h3><p>Here is the framework of algorithm.   </p>
+<p><a href="image-20230119023245286.png" title="image-20230119023245286" class="gallery-item"><img src="image-20230119023245286.png" alt="image-20230119023245286" style="zoom: 50%;" /></a></p>
+<p>So intuitively speaking, I want to break the process into three parts:</p>
+<ol>
+<li>Body Prediction</li>
+<li>Body coordination</li>
+<li>leg movement</li>
+</ol>
+<h3 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h3><p>Prediction system is to check if there exist any legs that need to move given locomotion instruction. </p>
+<p>The algorithm is about predicting the future location of each foot within a period given velocity input. And if there exists the legs that prediction is far enough. Then set to body status from “Static” to “Move” and start scheduling “How to move legs”. There will be a array of legs in order of moving priority.</p>
+<p>there are different ways of checking whether legs have to move or not, like the one made by checking gravity center, but from my perspective, measuring center of gravity cannot describe the motivation for legs movement, like rotating and acceleration. Measuring it from each legs perspective seems to be most practical.</p>
 <p>2) How to move legs?</p>
-<p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”. </p>
-<div id="animated-thumbnails">
-    <a href="/images/IllusoryMe1.jpg">
-        <a href="/images/locomotion/locomotionCycle.png" class="gallery-item"><img  src="/images/locomotion/locomotionCycle.png" /></a>
-    </a>
-</div>
-
-<p>and here is the comparison between running and walking for biped rig.</p>
-<div id="animated-thumbnails">
-    <a href="/images/IllusoryMe1.jpg">
-        <a href="/images/locomotion/running_walking.png" class="gallery-item"><img  src="/images/locomotion/running_walking.png" /></a>
-    </a>
-</div>
+<p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”.  I break each legs in “period” into two phase “Time_moving” and “Time_stop”, which “Time_moving” describe the phase when legs are moving in the air, and “Time_stop” describe the phase when feet on the ground supporting the body.</p>
+<p>and here is the comparison between running and walking for biped rig. As you can see the difference that in running circle there is a period that both legs are in the air. we call it as “Time_in_air”. Since creatures are actually dropping with gravity in “Time_in_air”, the period is actually really small on earth, around 0.1- 0.3s max.</p>
+<p>So the algorithm is pretty simple. Once we start to cycle the sequence, if a leg meets the trigger time:<br>1)Find the predicted destination.<br>2)Start to move to the destination in “Move Time”.</p>
+<p>3)Speed, Leg length and Period?<br>We all know that when running fast, the period is much shorter than walking one. What is the relation between “Speed” and “Period”.<br>The key to answer this is that “Time_stop” is the only relevant to “Velocity”and “Leg length”. Think about what happened during the “Time_stop”? Our body moves from backmost to front most, in “Speed” and “Stall Time”, right?<br>So We can conclude that:</p>
+<script type="math/tex; mode=display">
+</script><p>Then how do we know period? Suppose “Time_in_air” is constant aroun 0.1s (we are all ruled by gravity). We could say that:</p>
+<p>So that:</p>
+<p>So here we obtain the the relationship between input velocity and “Period”,”Time_move” and “Time_triggering” and “Time_stop”.</p>
+<p>4)Detailed Animation<br>If you watched the Unity Official Video, It that’s the y-axis movement as a semi-sphere,  which is wrong. The best way to describe feet movement is more like a cubic Bezier curve</p>
+<p>5)Optimization: Consistent Prediction.<br>Remember that currently  each foot destination is determined at the trigger moment. But is that destination ideal? The problem is what happen if velocity change? Do we have remedy?<br>Yes, Since before the foot hit the destination, it is always moving and adjustable. So we can adjust the destination on each frame. Here is the numerical algorithm.</p>
+<p>Here is the comparison between period prediction and consistent prediction.</p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
