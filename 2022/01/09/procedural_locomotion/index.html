@@ -100,25 +100,57 @@
 <p><a href="image-20230119023245286.png" title="image-20230119023245286" class="gallery-item"><img src="image-20230119023245286.png" alt="image-20230119023245286" style="zoom: 50%;" /></a></p>
 <p>So intuitively speaking, I want to break the process into three parts:</p>
 <ol>
-<li>Body Prediction</li>
-<li>Body coordination</li>
-<li>leg movement</li>
+<li><strong>Body Prediction</strong></li>
+<li><strong>Body coordination</strong></li>
+<li><strong>leg movement</strong></li>
+<li><strong>Dynamic Prediction Adjustment</strong></li>
 </ol>
-<h3 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h3><p>Prediction system is to check if there exist any legs that need to move given locomotion instruction. </p>
+<hr>
+<h3 id="1-Body-Prediction"><a href="#1-Body-Prediction" class="headerlink" title="1. Body Prediction"></a>1. Body Prediction</h3><p>Prediction system is to check if there exist any legs that need to move given locomotion instruction. </p>
 <p>The algorithm is about predicting the future location of each foot within a period given velocity input. And if there exists the legs that prediction is far enough. Then set to body status from “Static” to “Move” and start scheduling “How to move legs”. There will be a array of legs in order of moving priority.</p>
 <p>there are different ways of checking whether legs have to move or not, like the one made by checking gravity center, but from my perspective, measuring center of gravity cannot describe the motivation for legs movement, like rotating and acceleration. Measuring it from each legs perspective seems to be most practical.</p>
-<p>2) How to move legs?</p>
-<p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”.  I break each legs in “period” into two phase “Time_moving” and “Time_stop”, which “Time_moving” describe the phase when legs are moving in the air, and “Time_stop” describe the phase when feet on the ground supporting the body.</p>
-<p>and here is the comparison between running and walking for biped rig. As you can see the difference that in running circle there is a period that both legs are in the air. we call it as “Time_in_air”. Since creatures are actually dropping with gravity in “Time_in_air”, the period is actually really small on earth, around 0.1- 0.3s max.</p>
-<p>So the algorithm is pretty simple. Once we start to cycle the sequence, if a leg meets the trigger time:<br>1)Find the predicted destination.<br>2)Start to move to the destination in “Move Time”.</p>
-<p>3)Speed, Leg length and Period?<br>We all know that when running fast, the period is much shorter than walking one. What is the relation between “Speed” and “Period”.<br>The key to answer this is that “Time_stop” is the only relevant to “Velocity”and “Leg length”. Think about what happened during the “Time_stop”? Our body moves from backmost to front most, in “Speed” and “Stall Time”, right?<br>So We can conclude that:</p>
+<hr>
+<h3 id="2-Body-Coordination"><a href="#2-Body-Coordination" class="headerlink" title="2. Body Coordination"></a>2. Body Coordination</h3><h4 id="Coordination-between-different-rig-system"><a href="#Coordination-between-different-rig-system" class="headerlink" title="Coordination between different rig system"></a>Coordination between different rig system</h4><p>Empirically, creature move legs by order. Like some of us like to move left legs first as “regular” and others do right first as “goofy”. But none of us move two legs both ordinarily. So there is a specific sequence that drive all the legs. Each legs are trigger one by one within a “locomotion period”.  I break each legs in “period” into two phase “Time_moving” and “Time_stop”, which “Time_moving” describe the phase when legs are moving in the air, and “Time_stop” describe the phase when feet on the ground supporting the body.</p>
+<p><a href="image-20230119025544332.png" title="image-20230119025544332" class="gallery-item"><img src="image-20230119025544332.png" alt="image-20230119025544332" style="zoom:50%;" /></a></p>
+<h4 id="Coordination-between-different-velocity"><a href="#Coordination-between-different-velocity" class="headerlink" title="Coordination between different velocity"></a>Coordination between different velocity</h4><p>Here is the comparison between running and walking for biped rig. As you can see the difference that in running circle there is a period that both legs are in the air. we call it as “Time_in_air”. Since creatures are actually dropping with gravity in “Time_in_air”, the period is actually really small on earth, around 0.1- 0.3s max.</p>
+<p><a href="image-20230119030008218.png" title="image-20230119030008218" class="gallery-item"><img src="image-20230119030008218.png" alt="image-20230119030008218" style="zoom:50%;" /></a></p>
+<h4 id="Coordination-Algorithm"><a href="#Coordination-Algorithm" class="headerlink" title="Coordination Algorithm"></a>Coordination Algorithm</h4><p>So the algorithm is pretty simple. Once we start to cycle the sequence, if a leg meets the trigger time:<br>1)Find the predicted destination.<br>2)Start to move to the destination in “Move Time”.</p>
+<p>But how should we coordinate velocity and period? We all know that when running fast, the period is much shorter than walking one. The key to answer this is that “Time_stop” is the only relevant to “Velocity”and “Leg length”. Think about what happened during the “Time_stop”? Our body moves from backmost to front most, in “Speed” and “Stall Time”, right?<br>So We can conclude that:</p>
 <script type="math/tex; mode=display">
-</script><p>Then how do we know period? Suppose “Time_in_air” is constant aroun 0.1s (we are all ruled by gravity). We could say that:</p>
-<p>So that:</p>
-<p>So here we obtain the the relationship between input velocity and “Period”,”Time_move” and “Time_triggering” and “Time_stop”.</p>
-<p>4)Detailed Animation<br>If you watched the Unity Official Video, It that’s the y-axis movement as a semi-sphere,  which is wrong. The best way to describe feet movement is more like a cubic Bezier curve</p>
-<p>5)Optimization: Consistent Prediction.<br>Remember that currently  each foot destination is determined at the trigger moment. But is that destination ideal? The problem is what happen if velocity change? Do we have remedy?<br>Yes, Since before the foot hit the destination, it is always moving and adjustable. So we can adjust the destination on each frame. Here is the numerical algorithm.</p>
-<p>Here is the comparison between period prediction and consistent prediction.</p>
+\begin{aligned} T_{\text {period }} & =T_{\text {move }}+T_{\text {stop }} \\ 
+T_{\text {stop }} \times V_{\text {body }} & =L_{\text {stride }} \\
+T_{\text {stop }} & =\frac{L_{\text {stride }}}{V_{\text {body }}} \\
+\end{aligned}</script><p>Then how do we know period? Suppose “Time_in_air” is constant around 0.1s (we are all ruled by gravity). Which means that the starting time of last leg should be no longer than the end of first leg moving plus Time in air. </p>
+<p><a href="image-20230119031745591.png" title="image-20230119031745591" class="gallery-item"><img src="image-20230119031745591.png" alt="image-20230119031745591" style="zoom:67%;" /></a></p>
+<p>We could say that:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}T_{\text {stop }}+T_{\text {in air }} & =\frac{T_{\text {period }}}\\
+T_{\text {in air }}+\frac{L_{\text {stride }}}{V_{\text {body }}}=\frac{T_{\text {period }}}{n} 
+{n}\end{aligned}</script><p>So that, we can conclude all the relation to Velocity.</p>
+<script type="math/tex; mode=display">
+\begin{array}{l} 
+
+T_{\text {period }}=n \times\left(T_{\text {inair }}+\frac{L_{\text {stride }}}{V_{\text {body }}}\right) \\
+T_{\text {stop }}= \frac{L_{\text {stride }}}{V_{\text {body }}} \\
+T_{\text {move }}=n \times T_{\text {in air }}+\frac{n \times L_{\text {stride }}}{V_{\text {body }}}-\frac{L_{\text {stride }}}{V_{\text {body }}} \\
+T_{\text {move }}=n \times T_{\text {in air }}+\frac{(n-1) \times L_{s t i d e}}{V_{\text {body }}}
+\end{array}</script><p>So here we obtain the the relationship between input velocity and “Period”,”Time_move” and “Time_triggering” and “Time_stop”. And Length of Stride here is constant.</p>
+<script type="math/tex; mode=display">
+L_\text {stride } \approx \sqrt[2]{L_{\text {leg height }}{ }^{2}-L_{\text {leg length }}}{ }^{2}</script><h3 id="3-Leg-Movement"><a href="#3-Leg-Movement" class="headerlink" title="3. Leg Movement"></a>3. Leg Movement</h3><h4 id="Driver-and-IK"><a href="#Driver-and-IK" class="headerlink" title="Driver and IK"></a>Driver and IK</h4><p>I write a simple 2-link IK algorithm to make driver control the leg animation. You can find a lot about IK system so I won’t elaborate it here.</p>
+<h4 id="Driver-Detailed-Animation"><a href="#Driver-Detailed-Animation" class="headerlink" title="Driver Detailed Animation"></a>Driver Detailed Animation</h4><p>This is quite important. If you watched the Unity Official Video, They describe the driver movement that’s the y-axis movement as a semi-sphere,  which is wrong. The best way to describe feet movement is more like a cubic Bezier curve.</p>
+<p>To simplify, we take the four control points of this Bezier curve in ((0,0), (0,1)),  ((0.5,0) (1,0)) .</p>
+<p><a href="image-20230119034332203.png" title="image-20230119034332203" class="gallery-item"><img src="image-20230119034332203.png" alt="image-20230119034332203"></a></p>
+<p>The form of Cubic Bezier is:</p>
+<script type="math/tex; mode=display">
+\mathbf{B}(t)=(1-t)^3 \mathbf{P}_0+3(1-t)^2 t \mathbf{P}_1+3(1-t) t^2 \mathbf{P}_2+t^3 \mathbf{P}_3, 0 \leq t \leq 1</script><p>Since t is just the lerp value on X axis, so that we could obtain the movement on Y axis is:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Y(t)= & (1-t)^{3} \cdot 0+3(1-t)^{2} t \cdot 1
++3(1-t) t^{2} \cdot 0+t^{3} \cdot 0 \\
+Y(t)= & 3(1-t)^{2} t
+\end{aligned}</script><p>So this form is pretty simple.</p>
+<h3 id="Optimization-Dynamic-Prediction-Adjustment"><a href="#Optimization-Dynamic-Prediction-Adjustment" class="headerlink" title="Optimization: Dynamic Prediction Adjustment"></a>Optimization: Dynamic Prediction Adjustment</h3><p>Remember that currently  each foot destination is determined at the trigger moment. But is that destination ideal? The problem is what happen if velocity change during leg is moving? Do we have any remedis?<br>Yes, Since before the foot hit the destination, it is always moving and adjustable. So we can adjust the destination on each frame. Here is the numerical algorithm.</p>
+<p>Here is the comparison between period prediction and dynamic prediction adjustment.</p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
