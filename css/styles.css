@@ -55,8 +55,8 @@ input:focus, textarea:focus {
 	border-bottom: 1px solid #555;
 }
 
-h1, h2, h3 {
-	font-family: 'Crimson Text', sans-serif;
+h1, h2, h3, h4, h5 {
+	font-family: "Gill Sans", sans-serif;
 	letter-spacing: 1px;
 	font-weight: 300;
 	margin-bottom: 20px;
