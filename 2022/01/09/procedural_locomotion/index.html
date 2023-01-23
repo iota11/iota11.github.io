@@ -213,10 +213,11 @@ searching around, I hope this essay could be helpful :)</p>
 <p><strong>After weeks of experiment, the final result could satisfy the
 following requirements:</strong></p>
 <ol type="1">
-<li><em>coping with any rig systems, including unsymmetrical
-rigs.</em></li>
-<li><em>coping with any terrain conditions.</em></li>
-<li><em>dynamic transition from different velocity input.</em></li>
+<li><p><em>coping with any rig systems, including unsymmetrical
+rigs.</em></p></li>
+<li><p><em>coping with any terrain conditions.</em></p></li>
+<li><p><em>dynamic transition from different velocity input.</em></p>
+<p><a href="speedup.gif" title="speedup" class="gallery-item"><img src="speedup.gif" alt="speedup" style="zoom:50%;"></a></p></li>
 </ol>
 <p>The project was written in Unity C#.</p>
 <hr>
@@ -314,8 +315,15 @@ happen if velocity change during leg is moving? Do we have any remedis?
 Yes, Since before the foot hit the destination, it is always moving and
 adjustable. So we can adjust the destination on each frame. Here is the
 numerical algorithm.</p>
-<p>Here is the comparison between period prediction and dynamic
-prediction adjustment.</p>
+<p>Here is the comparison between period prediction(left bone) and
+dynamic prediction adjustment(right one).</p>
+<figure>
+<a href="DynamicRefine.gif" title="Comparison between &quot;period prediction&quot; and &quot;dynamic prediction adjustment&quot;" class="gallery-item"><img src="DynamicRefine.gif" alt="Comparison between &quot;period prediction&quot; and &quot;dynamic prediction adjustment&quot;"></a>
+<figcaption aria-hidden="true">Comparison between "period prediction"
+and "dynamic prediction adjustment"</figcaption>
+</figure>
+<p>As you can see, the robot with "Dynamic Prediction Adjustment" has
+much cleaner animation.</p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
