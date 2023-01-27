@@ -15,11 +15,8 @@
 
   <!--Description-->
   
-      <meta name="description" content="if (typeof lightGallery !== &#39;undefined&#39;) {
-        var options = {
-            selector: &#39;.gallery-item&#39;
-        };
-        lightGallery(document.getE">
+      <meta name="description" content="Wave Function CollapseI implemented this project in Houdini, inspired by Keijiro’s Wave Function Collapse . 
+The “wave function collapse”, or describe">
   
 
   <!--Author-->
@@ -90,7 +87,26 @@
   <h1>Wave Function Collapse</h1>
 </div>
 <div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="Wave-Function-Collapse"><a href="#Wave-Function-Collapse" class="headerlink" title="Wave Function Collapse"></a>Wave Function Collapse</h1><p>I implemented this project in Houdini, inspired by Keijiro’s <a target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a> . </p>
+<p>The “wave function collapse”, or described as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">“Constraints Satisfaction Problem”</a> in computer science,  is a way of problem that trying to satisfy a system with individual constraints. An example could be Sudoku Puzzle, which each slots of number has constraints and  influences other slots, and the whole 9x9 slot will shape a form that satisfy each slots. </p>
+<p>This algorithm has a large application in <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level design</a> and <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental module to shape a 3D maze that each slots are connected.</p>
+<p>The algorithm consists of two parts.</p>
+<ol>
+<li><strong>Module Variation</strong></li>
+<li><strong>Module Connectivity Encoding</strong></li>
+<li><strong>Slots Inference</strong></li>
+</ol>
+<hr>
+<h3 id="Module-Variation"><a href="#Module-Variation" class="headerlink" title="Module Variation"></a>Module Variation</h3><p>We takes the most fundamental modules to shape this maze. We name is as “L, T, I, S, X” by their connectivity.</p>
+<p><a href="image-20230127024938609.png" title="basic modules" class="gallery-item"><img src="image-20230127024938609.png" alt="basic modules"></a></p>
+<p>Think of them as LEGO Brick, each of them provides corresponding connectivity (as the blue markers).</p>
+<p><a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png" alt="basic modules connectivity"></a></p>
+<p>And we can simply connect them attached together to shape a simple maze.</p>
+<p>But we can rotate them also, to create variations. Each varication actually produces a new connectivity. We can think that, if we rotate the module in each 6 axis with 90 degree each, it will bring us with 24 variations. <a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations"></a></p>
+<p>So eventually it will give us a giant variation map like this.</p>
+<p><a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations"></a></p>
+<h3 id="Module-Connectivity-Encoding"><a href="#Module-Connectivity-Encoding" class="headerlink" title="Module Connectivity Encoding"></a>Module Connectivity Encoding</h3><p>The purpose of encoding is for system to easily pick up the correct module that satisfies the neighbor connectivity. I take this method to encode the connectivity info.</p>
+<p><a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity"></a></p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
