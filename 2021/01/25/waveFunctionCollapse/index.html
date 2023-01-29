@@ -15,8 +15,10 @@
 
   <!--Description-->
   
-      <meta name="description" content="Wave Function CollapseI implemented this project in Houdini, inspired by Keijiro’s Wave Function Collapse . 
-The “wave function collapse”, or describe">
+      <meta name="description" content="Wave Function Collapse
+I implemented this project in Houdini, inspired by Keijiro&#39;s Wave Function Collapse
+.
+The &#34;wave function collapse&#34;, or descr">
   
 
   <!--Author-->
@@ -87,26 +89,177 @@ The “wave function collapse”, or describe">
   <h1>Wave Function Collapse</h1>
 </div>
 <div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="Wave-Function-Collapse"><a href="#Wave-Function-Collapse" class="headerlink" title="Wave Function Collapse"></a>Wave Function Collapse</h1><p>I implemented this project in Houdini, inspired by Keijiro’s <a target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a> . </p>
-<p>The “wave function collapse”, or described as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">“Constraints Satisfaction Problem”</a> in computer science,  is a way of problem that trying to satisfy a system with individual constraints. An example could be Sudoku Puzzle, which each slots of number has constraints and  influences other slots, and the whole 9x9 slot will shape a form that satisfy each slots. </p>
-<p>This algorithm has a large application in <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level design</a> and <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental module to shape a 3D maze that each slots are connected.</p>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="wave-function-collapse">Wave Function Collapse</h1>
+<p>I implemented this project in Houdini, inspired by Keijiro's <a
+target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a>
+.</p>
+<p>The "wave function collapse", or described as <a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">"Constraints
+Satisfaction Problem"</a> in computer science, is a way of problem that
+trying to satisfy a system with individual constraints. An example could
+be Sudoku Puzzle, which each slots of number has constraints and
+influences other slots, and the whole 9x9 slot will shape a form that
+satisfy each slots.</p>
+<p>This algorithm has a large application in <a
+target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level
+design</a> and <a
+target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural
+generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental
+module to shape a 3D maze that each slots are connected.</p>
 <p>The algorithm consists of two parts.</p>
-<ol>
+<ol type="1">
 <li><strong>Module Variation</strong></li>
 <li><strong>Module Connectivity Encoding</strong></li>
 <li><strong>Slots Inference</strong></li>
 </ol>
-<hr>
-<h3 id="Module-Variation"><a href="#Module-Variation" class="headerlink" title="Module Variation"></a>Module Variation</h3><p>We takes the most fundamental modules to shape this maze. We name is as “L, T, I, S, X” by their connectivity.</p>
-<p><a href="image-20230127024938609.png" title="basic modules" class="gallery-item"><img src="image-20230127024938609.png" alt="basic modules"></a></p>
-<p>Think of them as LEGO Brick, each of them provides corresponding connectivity (as the blue markers).</p>
-<p><a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png" alt="basic modules connectivity"></a></p>
-<p>And we can simply connect them attached together to shape a simple maze.</p>
-<p>But we can rotate them also, to create variations. Each varication actually produces a new connectivity. We can think that, if we rotate the module in each 6 axis with 90 degree each, it will bring us with 24 variations. <a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations"></a></p>
+<hr />
+<h3 id="module-variation">Module Variation</h3>
+<p>We takes the most fundamental modules to shape this maze. We name is
+as "L, T, I, S, X" by their connectivity.</p>
+<p>Think of them as LEGO Brick, each of them provides corresponding
+connectivity (as the blue markers).</p>
+<figure>
+<a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png"
+alt="basic modules connectivity" /></a>
+<figcaption aria-hidden="true">basic modules connectivity</figcaption>
+</figure>
+<p>And we can simply connect them attached together to shape a simple
+maze.</p>
+<p>But we can rotate them also, to create variations. Each varication
+actually produces a new connectivity. To make the vairiants, the methos
+are</p>
+<ol type="1">
+<li>if we rotate the module along each of 6 axis(forward, backward, up,
+down, left and right) and get one variant.</li>
+<li>rotate long the specific axis with another 3 variants, with 90
+degree each/</li>
+</ol>
+<figure>
+<a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations" /></a>
+<figcaption aria-hidden="true">variations</figcaption>
+</figure>
+<p>The Vex is here: (type means which axis is majored)</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>type <span class="op">==</span> <span class="dv">0</span> <span class="op">)&#123;</span><span class="co">//forward majored</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(</span><span class="dv">0</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span><span class="co">//rotate align to front axis(we don&#39;t have to rotate since it is already along with the front axis)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>type <span class="op">==</span> <span class="dv">1</span><span class="op">)&#123;</span><span class="co">//back majored</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span> <span class="co">//rotate align to back axis</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span> <span class="co">//rotate along back axis</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>type <span class="op">==</span> <span class="dv">2</span><span class="op">)&#123;</span> <span class="co">//up majored</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">&#125;);</span> <span class="co">// rotate align up axis</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span> <span class="co">//rotate along the up xis</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>type <span class="op">==</span> <span class="dv">3</span><span class="op">)&#123;</span><span class="co">// down majored</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(-</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">&#125;);</span><span class="co">// roate align down axis</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span><span class="co">// roate along the up xis</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>type <span class="op">==</span> <span class="dv">4</span><span class="op">)&#123;</span> <span class="co">//left majored</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(-</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span><span class="co">//left</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">16</span><span class="op">;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>type <span class="op">==</span> <span class="dv">5</span><span class="op">)&#123;</span> <span class="co">//right majored</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m0<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">0</span><span class="op">&#125;);</span><span class="co">//right</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        m1 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        m2 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        m3 <span class="op">=</span> m0<span class="op">;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m1<span class="op">,</span> radians<span class="op">(</span><span class="dv">90</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m2<span class="op">,</span> radians<span class="op">(</span><span class="dv">180</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        rotate<span class="op">(</span>m3<span class="op">,</span> radians<span class="op">(</span><span class="dv">270</span><span class="op">),</span> <span class="op">&#123;</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,-</span><span class="dv">1</span><span class="op">&#125;);</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span></code></pre></div>
 <p>So eventually it will give us a giant variation map like this.</p>
-<p><a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations"></a></p>
-<h3 id="Module-Connectivity-Encoding"><a href="#Module-Connectivity-Encoding" class="headerlink" title="Module Connectivity Encoding"></a>Module Connectivity Encoding</h3><p>The purpose of encoding is for system to easily pick up the correct module that satisfies the neighbor connectivity. I take this method to encode the connectivity info.</p>
-<p><a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity"></a></p>
+<figure>
+<a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations" /></a>
+<figcaption aria-hidden="true">more variations</figcaption>
+</figure>
+<hr />
+<h3 id="module-connectivity-encoding">Module Connectivity Encoding</h3>
+<p>The purpose of encoding is for system to easily pick up the correct
+module that satisfies the neighbor connectivity. I take this method to
+encode the connectivity info.</p>
+<p>Firstly, I take the "Normal axis" of geometry intersection of each
+cubic face, to describe connectivity. Because, Normal is identical and
+will rotate with the variations as we mentioned above. We can name
+Normal axis has six different types, pointing towards "front",
+"back","up","down","left", and "right" with corresponding digits, and if
+there is no intersection of this cubic face, "0" will represent it.</p>
+<p>So that, we could use 6 digit number from 0-6 to describe each faces
+connectivity.</p>
+<figure>
+<a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity" /></a>
+<figcaption aria-hidden="true">Encoding Connectivity</figcaption>
+</figure>
+<p>In Houdini, I implemented it in VEX, here's the encoder script.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>function <span class="dt">int</span><span class="op">[]</span> connGen<span class="op">(</span>vector vectorList<span class="op">[];</span> vector axisList<span class="op">[])&#123;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">//axisList store the normal axis of each faces intersection.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//vectorList stores the normal of each faces.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> conn<span class="op">[]</span> <span class="op">=</span> array<span class="op">(</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">,</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i<span class="op">&lt;</span>len<span class="op">(</span>vectorList<span class="op">);</span> i<span class="op">++)&#123;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        vector v <span class="op">=</span> vectorList<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        vector a <span class="op">=</span> axisList<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> type <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>a<span class="op">.</span>x<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">1</span><span class="op">;&#125;</span><span class="co">//normal axis point to x+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(-</span>a<span class="op">.</span>x<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">2</span><span class="op">;&#125;</span><span class="co">//x-</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>a<span class="op">.</span>y<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">3</span><span class="op">;&#125;</span><span class="co">//y+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(-</span>a<span class="op">.</span>y<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">4</span><span class="op">;&#125;</span><span class="co">//y-</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>a<span class="op">.</span>z<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">5</span><span class="op">;&#125;</span><span class="co">//z+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(-</span>a<span class="op">.</span>z<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)&#123;</span>type <span class="op">=</span> <span class="dv">6</span><span class="op">;&#125;</span><span class="co">//z-</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>x<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">0</span><span class="op">]=</span>type<span class="op">;&#125;</span> <span class="co">//encode front face</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>x<span class="op">&lt;-</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">1</span><span class="op">]=</span>type<span class="op">;&#125;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>y<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">4</span><span class="op">]=</span>type<span class="op">;&#125;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>y<span class="op">&lt;-</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">5</span><span class="op">]=</span>type<span class="op">;&#125;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>z<span class="op">&gt;</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">2</span><span class="op">]=</span>type<span class="op">;&#125;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>v<span class="op">.</span>z<span class="op">&lt;-</span><span class="fl">0.99</span><span class="op">)</span> <span class="op">&#123;</span>conn<span class="op">[</span><span class="dv">3</span><span class="op">]=</span>type<span class="op">;&#125;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">&#125;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> conn<span class="op">;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="op">&#125;</span></span></code></pre></div>
+<p>And by applying each 24 variations with given type (majored axis), we
+will get all the connectivity as shown:</p>
+<figure>
+<a href="image-20230128012206359.png" title="24 variants" class="gallery-item"><img src="image-20230128012206359.png" alt="24 variants" /></a>
+<figcaption aria-hidden="true">24 variants</figcaption>
+</figure>
+<hr />
+<h3 id="slot-inference">Slot Inference</h3>
+<p>Finally, after all these preparation, we get to the most exciting
+part, to generate the maze.</p>
+<p>Firstly, we generate the point cloud and initiate neighbor's</p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
