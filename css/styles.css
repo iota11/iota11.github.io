@@ -26,48 +26,100 @@ button:hover {
 input, textarea {
 	font-size: 0.8rem;
   border: 1px solid #ddd;
-  background: #fff;
+  background: rgb(78, 78, 78);
   padding: 0.5rem 0.7rem;
 	margin: 5px 0;
   transition: all 0.3s ease-in-out;
   width: 100%;
-
 }
+
+
 
 input:focus, textarea:focus {
   border-color: #777;
   outline: none;
 }
 
+
+
+
+
+
+
+
+
+
+
 .portfolio-content {
+	max-width: 1000px;
 	line-height: 2;
 	color: #555;
 }
 
+.page-content {
+
+	line-height: 2;
+	color: #555;
+}
+
+
 .portfolio-content a {
+	max-width: 1000px;
 	color: #333;
 	text-decoration: none;
 	border-bottom: 1px solid #bbb;
 }
 
 .portfolio-content a:hover {
+	max-width: 1000px;
 	color: #000;
 	text-decoration: none;
 	border-bottom: 1px solid #555;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3 {
+	font-family: "Gill Sans", sans-serif;
+	letter-spacing: 1px;
+	font-weight: 300;
+	margin-bottom: 20px;
+	background-color: aqua;
+
+}
+h4, h5 {
 	font-family: "Gill Sans", sans-serif;
 	letter-spacing: 1px;
 	font-weight: 300;
 	margin-bottom: 20px;
 }
+p
+{
+	font-family: "Gill Sans", sans-serif;
+    color:rgb(148, 148, 148);
+    
+}
+
+.gallery-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-start;
+}
+
+.gallery-column {
+	display: flex;
+	flex-direction: column-reverse;
+}
 
 img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    box-shadow: 0px 0px 8px #999;
+    
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
+	max-width: 100%;
+	height: auto;
+	border-radius: 5px;
+	box-shadow: 0px 0px 8px #999;
+	
 }
 
 .navbar-brand {
