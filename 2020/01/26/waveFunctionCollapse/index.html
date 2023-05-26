@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head tag -->
+  <head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Title -->
+  
+  <title>Wave Function Collapse - Jiayu He</title>
+
+  <!--Favicon-->
+  <link rel="icon" href="favicon/favicon.ico">
+
+  <!--Description-->
+  
+      <meta name="description" content="Wave Function Collapse
+
+I implemented this project in Houdini, inspired by Keijiro’s Wave Function Collapse . 
+The “wave function collapse”, or descri">
+  
+
+  <!--Author-->
+  
+      <meta name="author" content="Jiayu He">
+  
+
+  <!-- Pure CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans:300,800" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 6.3.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+
+
+
+  <body>
+  	<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container-fluid navbar-container m-sm-5">
+      <!-- Header -->
+      <nav class="navbar navbar-toggleable-sm navbar-light px-1 py-3 my-3 mb-sm-5">
+  <a class="navbar-brand ml-2" href="/">Jiayu He</a>
+  <button class="navbar-toggler navbar-toggler-right py-2" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse text-center" id="navbarCollapse">
+    <ul class="navbar-nav ml-auto my-auto">
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/reel">Reel</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" rel="noopener" href="https://www.instagram.com/jiayuhe511/">Instagram</a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" rel="noopener" href="https://www.linkedin.com/in/jiayu-he-389213145/">LinkedIn</a>
+        </li>
+      
+    </ul>
+    <hr class="hidden-md-up" />
+  </div>
+</nav>
+
+
+  		<div class="row">
+  			<div class="col-lg-4 col-12 pt-3 px-4 pr-lg-5">
+  <h1>Wave Function Collapse</h1>
+</div>
+<div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="Wave-Function-Collapse"><a href="#Wave-Function-Collapse" class="headerlink" title="Wave Function Collapse"></a>Wave Function Collapse</h1><p><a href="wfc.gif" title="wfc" class="gallery-item"><img src="wfc.gif" alt="wfc"></a></p>
+<p><a href="habitate_wfc.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc.gif" alt="habitate_wfc"></a></p>
+<p>I implemented this project in Houdini, inspired by Keijiro’s <a target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a> . </p>
+<p>The “wave function collapse”, or described as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">“Constraints Satisfaction Problem”</a> in computer science,  is a way of problem that trying to satisfy a system with individual constraints. An example could be Sudoku Puzzle, which each slots of number has constraints and  influences other slots, and the whole 9x9 slot will shape a form that satisfy each slots. </p>
+<p><a href="wfc_demo-1675239195998-10.gif" title="wfc_demo" class="gallery-item"><img src="wfc_demo-1675239195998-10.gif" alt="wfc_demo"></a></p>
+<p>This algorithm has a large application in <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level design</a> and <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental module to shape a 3D maze that each slots are connected.</p>
+<p>The algorithm consists of two parts.</p>
+<ol>
+<li><p><strong>Module Variation</strong></p>
+</li>
+<li><p><strong>Module Connectivity Encoding</strong></p>
+</li>
+<li><p><strong>Slots Inference</strong></p>
+<p><a href="wfc_flowchart-1675233555271-4.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart-1675233555271-4.png" alt="wfc_flowchart"></a></p>
+</li>
+</ol>
+<hr>
+<h3 id="Module-Variation"><a href="#Module-Variation" class="headerlink" title="Module Variation"></a>Module Variation</h3><p>We takes the most fundamental modules to shape this maze. We name is as “L, T, I, S, X” by their connectivity.</p>
+<p>Think of them as LEGO Brick, each of them provides corresponding connectivity (as the blue markers).</p>
+<p><a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png" alt="basic modules connectivity"></a> </p>
+<p>And we can simply connect them attached together to shape a simple maze.</p>
+<p>But we can rotate them also, to create variations. Each varication actually produces a new connectivity. To make the variants, the methods are</p>
+<p>1) if we rotate the module along each of 6 axis(forward, backward, up, down, left and right) and get one variant.<br>2) rotate long the specific axis with another 3 variants,  with 90 degree each</p>
+<p><a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations"></a></p>
+<p>Type refers to slot with different majored axis.</p>
+<p>So eventually it will give us a giant variation map like this.</p>
+<p><a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations"></a></p>
+<hr>
+<h3 id="Module-Connectivity-Encoding"><a href="#Module-Connectivity-Encoding" class="headerlink" title="Module Connectivity Encoding"></a>Module Connectivity Encoding</h3><p>The purpose of encoding is for system to easily pick up the correct module that satisfies the neighbor connectivity. I take this method to encode the connectivity info.</p>
+<p>Firstly, I take the “Normal axis” of  geometry intersection of each cubic face,  to describe connectivity. Because, Normal is identical and will rotate with the variations as we mentioned above. We can name Normal axis has six different types, pointing towards “front”, “back”,”up”,”down”,”left”, and “right” with corresponding digits, and if there is no intersection of this cubic face, “0” will represent it. </p>
+<p>So that, we could use 6 digit number from 0-6 to describe each faces connectivity.</p>
+<p><a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity"></a><br>And by applying each 24 variations with given type (majored axis), we will get all the connectivity as shown:</p>
+<p><a href="image-20230128012206359.png" title="24 variants" class="gallery-item"><img src="image-20230128012206359.png" alt="24 variants"></a></p>
+<hr>
+<h3 id="Slot-Inference"><a href="#Slot-Inference" class="headerlink" title="Slot Inference"></a>Slot Inference</h3><p>Finally, after all these preparation, we get to the most exciting part, to generate the maze.</p>
+<p><a href="inference_wfc.gif" title="inference_wfc" class="gallery-item"><img src="inference_wfc.gif" alt="inference_wfc"></a></p>
+<p>Firstly, we generate the point cloud and initiate neighbor’s connectivity. The border slots, since they have null neighbors, the connectivity to them are marked as 0 initially. </p>
+<p><a href="wfc_flowchart.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart.png" alt="wfc_flowchart"></a></p>
+<p>1) <strong>Find least entropy slot:</strong></p>
+<p>   The “entropy” here means how much possibility that a slot could have, or intuitively, how many modules in library could satisfy current slot’s constraints.  We will find the “least entropy slot” every steps.</p>
+<p>2) <strong>Collapse:</strong></p>
+<p>   Collapse is a important term that describe this slot is replaced with a specific module. From my implementation, I choose the module randomly as along as it could satisfy current constraints.</p>
+<p>3) <strong>History Retrieve</strong>:</p>
+<p>   The slot will record the last steps of slot, that it could happen when there is no modules satisfied (we will meet this dilemma when solving Sudoku right? ) . When this occurs, the system will jump back to the last slots and re-choose the modules except current choice. If we can’t find one then keep jumping back, until a solution is provided.</p>
+<p>here is a graph depicting the process.</p>
+<p><a href="image-20230201022724536.png" title="inference" class="gallery-item"><img src="image-20230201022724536.png" alt="inference"></a></p>
+<p>it is fairly easy :)</p>
+<p>You definitely could try more combinations of modules and connectivity. I provide some examples with this system below.</p>
+<hr>
+<h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h3><h4 id="Procedural-level-design"><a href="#Procedural-level-design" class="headerlink" title="Procedural level design"></a>Procedural level design</h4><p><a href="image-20230201025121566.png" title="image-20230201025121566" class="gallery-item"><img src="image-20230201025121566.png" alt="image-20230201025121566"></a></p>
+<h4 id="Habitate-67"><a href="#Habitate-67" class="headerlink" title="Habitate 67"></a>Habitate 67</h4><p>“Habitate 67” is designed by Moshe Safdie. comprises 354 identical pre-fabricated modules(11.7 m × 5.3 m × 3 m [38 ft 5 in × 17 ft 5 in × 9 ft 10 in]) arranged in various combinations.</p>
+<p><a href="image-20230201025522243.png" title="habitate 67" class="gallery-item"><img src="image-20230201025522243.png" alt="habitate 67"></a></p>
+<p>“Habitate 67” is perfect for WFC algorithm.</p>
+<p>And here is my approach result.</p>
+<p><a href="habitate_wfc-1675239171707-8.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc-1675239171707-8.gif" alt="habitate_wfc"></a></p>
+<p><a href="city01_999.png" title="city01_999" class="gallery-item"><img src="city01_999.png" alt="city01_999"></a></p>
+<p><a href="city02_1977.png" title="city02_1977" class="gallery-item"><img src="city02_1977.png" alt="city02_1977"></a></p>
+</div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
+        var options = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options);
+        }</script>
+</div>
+
+
+      </div>
+      
+  	</div>
+
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>
