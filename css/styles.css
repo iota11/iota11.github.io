@@ -1,6 +1,6 @@
 body {
 	font-family: "Gill Sans", sans-serif;
-	color:aqua
+	color:rgb(0, 0, 0)
 }
 
 form {
@@ -82,7 +82,7 @@ h1, h2, h3 {
 	letter-spacing: 1px;
 	font-weight: 300;
 	margin-bottom: 20px;
-	background-color: aqua;
+	background-color: rgb(255, 255, 255);
 
 }
 h4, h5 {
@@ -97,7 +97,28 @@ p
     color:rgb(148, 148, 148);
     
 }
-
+.description
+{
+	float: Left;
+	max-width: 1000px;
+	max-height: 450px;
+	font-family: "Gill Sans", sans-serif;
+    color:rgb(140, 140, 140);
+	line-height: 0.9;
+	font-size: 0.9rem;
+    
+}
+.description2
+{
+	float: Left;
+	max-width: 1000px;
+	max-height: 450px;
+	font-family: "Gill Sans", sans-serif;
+    color:rgb(140, 140, 140);
+	line-height: 2;
+	font-size: 0.9rem;
+    
+}
 .gallery-list {
 	display: flex;
 	flex-direction: row;
@@ -118,7 +139,7 @@ img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 5px;
-	box-shadow: 0px 0px 8px #999;
+	box-shadow: 0px 0px 0px #ffffff;
 	
 }
 
@@ -216,8 +237,8 @@ img {
 }
 
 .hovereffect:hover img {
-  opacity: 0;
-  filter: alpha(opacity=0);
+  opacity: 0.3;
+  filter: alpha(opacity=0.3);
 }
 .page-nav {
 	width: 50%;
