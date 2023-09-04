@@ -110,7 +110,7 @@ p
 }
 .description2
 {
-	float: Left;
+	padding-left: 30px;
 	max-width: 1000px;
 	max-height: 450px;
 	font-family: "Gill Sans", sans-serif;
