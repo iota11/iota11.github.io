@@ -87,172 +87,68 @@
   <h1>Wave Function Collapse</h1>
 </div>
 <div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="wave-function-collapse">Wave Function Collapse</h1>
-<h5 id="project-info">Project Info:</h5>
-<ul>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="Wave-Function-Collapse"><a href="#Wave-Function-Collapse" class="headerlink" title="Wave Function Collapse"></a>Wave Function Collapse</h1><h5 id="Project-Info"><a href="#Project-Info" class="headerlink" title="Project Info:"></a>Project Info:</h5><ul>
 <li>Personal work</li>
 <li>Houdini &amp; VEX</li>
 <li>Procedural Generation</li>
 </ul>
-<figure>
-<a href="wfc.gif" title="wfc" class="gallery-item"><img src="wfc.gif" alt="wfc" /></a>
-<figcaption aria-hidden="true">wfc</figcaption>
-</figure>
-<figure>
-<a href="habitate_wfc.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc.gif" alt="habitate_wfc" /></a>
-<figcaption aria-hidden="true">habitate_wfc</figcaption>
-</figure>
-<p>I implemented this project in Houdini, inspired by Keijiro's <a
-target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a>
-.</p>
-<p>The "wave function collapse", or described as <a
-target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">"Constraints
-Satisfaction Problem"</a> in computer science, is a way of problem that
-trying to satisfy a system with individual constraints. An example could
-be Sudoku Puzzle, which each slots of number has constraints and
-influences other slots, and the whole 9x9 slot will shape a form that
-satisfy each slots.</p>
-<figure>
-<a href="wfc_demo-1675239195998-10.gif" title="wfc_demo" class="gallery-item"><img src="wfc_demo-1675239195998-10.gif" alt="wfc_demo" /></a>
-<figcaption aria-hidden="true">wfc_demo</figcaption>
-</figure>
-<p>This algorithm has a large application in <a
-target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level
-design</a> and <a
-target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural
-generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental
-module to shape a 3D maze that each slots are connected.</p>
+<p><a href="wfc.gif" title="wfc" class="gallery-item"><img src="wfc.gif" alt="wfc"></a></p>
+<p><a href="habitate_wfc.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc.gif" alt="habitate_wfc"></a></p>
+<p>I implemented this project in Houdini, inspired by Keijiro’s <a target="_blank" rel="noopener" href="https://github.com/keijiro/WfcMaze">Wave Function Collapse</a> . </p>
+<p>The “wave function collapse”, or described as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constraint_satisfaction_problem">“Constraints Satisfaction Problem”</a> in computer science,  is a way of problem that trying to satisfy a system with individual constraints. An example could be Sudoku Puzzle, which each slots of number has constraints and  influences other slots, and the whole 9x9 slot will shape a form that satisfy each slots. </p>
+<p><a href="wfc_demo-1675239195998-10.gif" title="wfc_demo" class="gallery-item"><img src="wfc_demo-1675239195998-10.gif" alt="wfc_demo"></a></p>
+<p>This algorithm has a large application in <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">level design</a> and <a target="_blank" rel="noopener" href="https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/">procedural generation(by Osckar Stalberg)</a>, Here I try to use 5 most fundamental module to shape a 3D maze that each slots are connected.</p>
 <p>The algorithm consists of two parts.</p>
-<ol type="1">
-<li><p><strong>Module Variation</strong></p></li>
-<li><p><strong>Module Connectivity Encoding</strong></p></li>
+<ol>
+<li><p><strong>Module Variation</strong></p>
+</li>
+<li><p><strong>Module Connectivity Encoding</strong></p>
+</li>
 <li><p><strong>Slots Inference</strong></p>
-<figure>
-<a href="wfc_flowchart-1675233555271-4.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart-1675233555271-4.png" alt="wfc_flowchart" /></a>
-<figcaption aria-hidden="true">wfc_flowchart</figcaption>
-</figure></li>
+<p><a href="wfc_flowchart-1675233555271-4.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart-1675233555271-4.png" alt="wfc_flowchart"></a></p>
+</li>
 </ol>
-<hr />
-<h3 id="module-variation">Module Variation</h3>
-<p>We takes the most fundamental modules to shape this maze. We name is
-as "L, T, I, S, X" by their connectivity.</p>
-<p>Think of them as LEGO Brick, each of them provides corresponding
-connectivity (as the blue markers).</p>
-<figure>
-<a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png"
-alt="basic modules connectivity" /></a>
-<figcaption aria-hidden="true">basic modules connectivity</figcaption>
-</figure>
-<p>And we can simply connect them attached together to shape a simple
-maze.</p>
-<p>But we can rotate them also, to create variations. Each varication
-actually produces a new connectivity. To make the variants, the methods
-are</p>
-<ol type="1">
-<li>if we rotate the module along each of 6 axis(forward, backward, up,
-down, left and right) and get one variant.</li>
-<li>rotate long the specific axis with another 3 variants, with 90
-degree each</li>
-</ol>
-<figure>
-<a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations" /></a>
-<figcaption aria-hidden="true">variations</figcaption>
-</figure>
+<hr>
+<h3 id="Module-Variation"><a href="#Module-Variation" class="headerlink" title="Module Variation"></a>Module Variation</h3><p>We takes the most fundamental modules to shape this maze. We name is as “L, T, I, S, X” by their connectivity.</p>
+<p>Think of them as LEGO Brick, each of them provides corresponding connectivity (as the blue markers).</p>
+<p><a href="image-20230127025251022.png" title="basic modules connectivity" class="gallery-item"><img src="image-20230127025251022.png" alt="basic modules connectivity"></a> </p>
+<p>And we can simply connect them attached together to shape a simple maze.</p>
+<p>But we can rotate them also, to create variations. Each varication actually produces a new connectivity. To make the variants, the methods are</p>
+<p>1) if we rotate the module along each of 6 axis(forward, backward, up, down, left and right) and get one variant.<br>2) rotate long the specific axis with another 3 variants,  with 90 degree each</p>
+<p><a href="image-20230127030419721.png" title="variations" class="gallery-item"><img src="image-20230127030419721.png" alt="variations"></a></p>
 <p>Type refers to slot with different majored axis.</p>
 <p>So eventually it will give us a giant variation map like this.</p>
-<figure>
-<a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations" /></a>
-<figcaption aria-hidden="true">more variations</figcaption>
-</figure>
-<hr />
-<h3 id="module-connectivity-encoding">Module Connectivity Encoding</h3>
-<p>The purpose of encoding is for system to easily pick up the correct
-module that satisfies the neighbor connectivity. I take this method to
-encode the connectivity info.</p>
-<p>Firstly, I take the "Normal axis" of geometry intersection of each
-cubic face, to describe connectivity. Because, Normal is identical and
-will rotate with the variations as we mentioned above. We can name
-Normal axis has six different types, pointing towards "front",
-"back","up","down","left", and "right" with corresponding digits, and if
-there is no intersection of this cubic face, "0" will represent it.</p>
-<p>So that, we could use 6 digit number from 0-6 to describe each faces
-connectivity.</p>
-<p><a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity" /></a>
-And by applying each 24 variations with given type (majored axis), we
-will get all the connectivity as shown:</p>
-<figure>
-<a href="image-20230128012206359.png" title="24 variants" class="gallery-item"><img src="image-20230128012206359.png" alt="24 variants" /></a>
-<figcaption aria-hidden="true">24 variants</figcaption>
-</figure>
-<hr />
-<h3 id="slot-inference">Slot Inference</h3>
-<p>Finally, after all these preparation, we get to the most exciting
-part, to generate the maze.</p>
-<figure>
-<a href="inference_wfc.gif" title="inference_wfc" class="gallery-item"><img src="inference_wfc.gif" alt="inference_wfc" /></a>
-<figcaption aria-hidden="true">inference_wfc</figcaption>
-</figure>
-<p>Firstly, we generate the point cloud and initiate neighbor's
-connectivity. The border slots, since they have null neighbors, the
-connectivity to them are marked as 0 initially.</p>
-<figure>
-<a href="wfc_flowchart.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart.png" alt="wfc_flowchart" /></a>
-<figcaption aria-hidden="true">wfc_flowchart</figcaption>
-</figure>
-<ol type="1">
-<li><p><strong>Find least entropy slot:</strong></p>
-<p>The "entropy" here means how much possibility that a slot could have,
-or intuitively, how many modules in library could satisfy current slot's
-constraints. We will find the "least entropy slot" every steps.</p></li>
-<li><p><strong>Collapse:</strong></p>
-<p>Collapse is a important term that describe this slot is replaced with
-a specific module. From my implementation, I choose the module randomly
-as along as it could satisfy current constraints.</p></li>
-<li><p><strong>History Retrieve</strong>:</p>
-<p>The slot will record the last steps of slot, that it could happen
-when there is no modules satisfied (we will meet this dilemma when
-solving Sudoku right? ) . When this occurs, the system will jump back to
-the last slots and re-choose the modules except current choice. If we
-can't find one then keep jumping back, until a solution is
-provided.</p></li>
-</ol>
+<p><a href="image-20230127031604812.png" title="more variations" class="gallery-item"><img src="image-20230127031604812.png" alt="more variations"></a></p>
+<hr>
+<h3 id="Module-Connectivity-Encoding"><a href="#Module-Connectivity-Encoding" class="headerlink" title="Module Connectivity Encoding"></a>Module Connectivity Encoding</h3><p>The purpose of encoding is for system to easily pick up the correct module that satisfies the neighbor connectivity. I take this method to encode the connectivity info.</p>
+<p>Firstly, I take the “Normal axis” of  geometry intersection of each cubic face,  to describe connectivity. Because, Normal is identical and will rotate with the variations as we mentioned above. We can name Normal axis has six different types, pointing towards “front”, “back”,”up”,”down”,”left”, and “right” with corresponding digits, and if there is no intersection of this cubic face, “0” will represent it. </p>
+<p>So that, we could use 6 digit number from 0-6 to describe each faces connectivity.</p>
+<p><a href="image-20230127031859950.png" title="Encoding Connectivity" class="gallery-item"><img src="image-20230127031859950.png" alt="Encoding Connectivity"></a><br>And by applying each 24 variations with given type (majored axis), we will get all the connectivity as shown:</p>
+<p><a href="image-20230128012206359.png" title="24 variants" class="gallery-item"><img src="image-20230128012206359.png" alt="24 variants"></a></p>
+<hr>
+<h3 id="Slot-Inference"><a href="#Slot-Inference" class="headerlink" title="Slot Inference"></a>Slot Inference</h3><p>Finally, after all these preparation, we get to the most exciting part, to generate the maze.</p>
+<p><a href="inference_wfc.gif" title="inference_wfc" class="gallery-item"><img src="inference_wfc.gif" alt="inference_wfc"></a></p>
+<p>Firstly, we generate the point cloud and initiate neighbor’s connectivity. The border slots, since they have null neighbors, the connectivity to them are marked as 0 initially. </p>
+<p><a href="wfc_flowchart.png" title="wfc_flowchart" class="gallery-item"><img src="wfc_flowchart.png" alt="wfc_flowchart"></a></p>
+<p>1) <strong>Find least entropy slot:</strong></p>
+<p>   The “entropy” here means how much possibility that a slot could have, or intuitively, how many modules in library could satisfy current slot’s constraints.  We will find the “least entropy slot” every steps.</p>
+<p>2) <strong>Collapse:</strong></p>
+<p>   Collapse is a important term that describe this slot is replaced with a specific module. From my implementation, I choose the module randomly as along as it could satisfy current constraints.</p>
+<p>3) <strong>History Retrieve</strong>:</p>
+<p>   The slot will record the last steps of slot, that it could happen when there is no modules satisfied (we will meet this dilemma when solving Sudoku right? ) . When this occurs, the system will jump back to the last slots and re-choose the modules except current choice. If we can’t find one then keep jumping back, until a solution is provided.</p>
 <p>here is a graph depicting the process.</p>
-<figure>
-<a href="image-20230201022724536.png" title="inference" class="gallery-item"><img src="image-20230201022724536.png" alt="inference" /></a>
-<figcaption aria-hidden="true">inference</figcaption>
-</figure>
+<p><a href="image-20230201022724536.png" title="inference" class="gallery-item"><img src="image-20230201022724536.png" alt="inference"></a></p>
 <p>it is fairly easy :)</p>
-<p>You definitely could try more combinations of modules and
-connectivity. I provide some examples with this system below.</p>
-<hr />
-<h3 id="examples">Examples</h3>
-<h4 id="procedural-level-design">Procedural level design</h4>
-<figure>
-<a href="image-20230201025121566.png" title="image-20230201025121566" class="gallery-item"><img src="image-20230201025121566.png" alt="image-20230201025121566" /></a>
-<figcaption aria-hidden="true">image-20230201025121566</figcaption>
-</figure>
-<h4 id="habitate-67">Habitate 67</h4>
-<p>"Habitate 67" is designed by Moshe Safdie. comprises 354 identical
-pre-fabricated modules(11.7 m × 5.3 m × 3 m [38 ft 5 in × 17 ft 5 in × 9
-ft 10 in]) arranged in various combinations.</p>
-<figure>
-<a href="image-20230201025522243.png" title="habitate 67" class="gallery-item"><img src="image-20230201025522243.png" alt="habitate 67" /></a>
-<figcaption aria-hidden="true">habitate 67</figcaption>
-</figure>
-<p>"Habitate 67" is perfect for WFC algorithm.</p>
+<p>You definitely could try more combinations of modules and connectivity. I provide some examples with this system below.</p>
+<hr>
+<h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h3><h4 id="Procedural-level-design"><a href="#Procedural-level-design" class="headerlink" title="Procedural level design"></a>Procedural level design</h4><p><a href="image-20230201025121566.png" title="image-20230201025121566" class="gallery-item"><img src="image-20230201025121566.png" alt="image-20230201025121566"></a></p>
+<h4 id="Habitate-67"><a href="#Habitate-67" class="headerlink" title="Habitate 67"></a>Habitate 67</h4><p>“Habitate 67” is designed by Moshe Safdie. comprises 354 identical pre-fabricated modules(11.7 m × 5.3 m × 3 m [38 ft 5 in × 17 ft 5 in × 9 ft 10 in]) arranged in various combinations.</p>
+<p><a href="image-20230201025522243.png" title="habitate 67" class="gallery-item"><img src="image-20230201025522243.png" alt="habitate 67"></a></p>
+<p>“Habitate 67” is perfect for WFC algorithm.</p>
 <p>And here is my approach result.</p>
-<figure>
-<a href="habitate_wfc-1675239171707-8.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc-1675239171707-8.gif" alt="habitate_wfc" /></a>
-<figcaption aria-hidden="true">habitate_wfc</figcaption>
-</figure>
-<figure>
-<a href="city01_999.png" title="city01_999" class="gallery-item"><img src="city01_999.png" alt="city01_999" /></a>
-<figcaption aria-hidden="true">city01_999</figcaption>
-</figure>
-<figure>
-<a href="city02_1977.png" title="city02_1977" class="gallery-item"><img src="city02_1977.png" alt="city02_1977" /></a>
-<figcaption aria-hidden="true">city02_1977</figcaption>
-</figure>
+<p><a href="habitate_wfc-1675239171707-8.gif" title="habitate_wfc" class="gallery-item"><img src="habitate_wfc-1675239171707-8.gif" alt="habitate_wfc"></a></p>
+<p><a href="city01_999.png" title="city01_999" class="gallery-item"><img src="city01_999.png" alt="city01_999"></a></p>
+<p><a href="city02_1977.png" title="city02_1977" class="gallery-item"><img src="city02_1977.png" alt="city02_1977"></a></p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'

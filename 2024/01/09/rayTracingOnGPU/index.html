@@ -199,99 +199,30 @@ mjx-container[display="true"] + br {
   <h1>Realtime Ray Tracing on GPU</h1>
 </div>
 <div class="col-lg-8 col-12 pt-lg-3 mb-4 pl-lg-5 px-lg-0 px-4 portfolio-content">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="a-realtime-raytracing-renderer-in-unity">A Realtime RayTracing
-Renderer in Unity</h1>
-<p>I implemented this renderer during Fall Break in 2023, with my strong
-interest to immigrate more algorithm in GPU.</p>
-<p>Here are some results I achieved. Everything is rendered in
-real-time. Here are some results.</p>
-<figure>
-<a href="BVHDemo.gif" title="BVHDemo" class="gallery-item"><img src="BVHDemo.gif" alt="BVHDemo"></a>
-<figcaption aria-hidden="true">BVHDemo</figcaption>
-</figure>
-<p>My renderer currently supports SAH BVH construction on CPU and
-visualization (as the grey boxes you can see) . It also supports reading
-unity legacy materials and transfer them into Raytracing property. The
-algorithm using compute shader to run ray tracing method on GPU.</p>
-<figure>
-<a href="BVHDemoMaterials.gif" title="BVHDemoMaterials" class="gallery-item"><img src="BVHDemoMaterials.gif" alt="BVHDemoMaterials"></a>
-<figcaption aria-hidden="true">BVHDemoMaterials</figcaption>
-</figure>
-<p>I majorly take this <a target="_blank" rel="noopener" href="http://three-eyed-games.com/2018/05/03/gpu-ray-tracing-in-unity-part-1/">reference</a>
-from David Kuri. I implemented my own way building BVH and raytracing on
-GPU.</p>
-<h2 id="structure">Structure</h2>
-<p>Render Pipeline. The graph show how do compute</p>
-<figure>
-<a href="image-20231022175542901.png" title="Render Pipeline" class="gallery-item"><img src="image-20231022175542901.png" alt="Render Pipeline"></a>
-<figcaption aria-hidden="true">Render Pipeline</figcaption>
-</figure>
-<p>The graph below shows how do we collect data from each objects and
-store it into corresponding GPU Buffers.</p>
-<figure>
-<a href="image-20231021201713042.png" title="Data Transfer" class="gallery-item"><img src="image-20231021201713042.png" alt="Data Transfer"></a>
-<figcaption aria-hidden="true">Data Transfer</figcaption>
-</figure>
-<h3 id="build-bvh-with-sah">Build BVH with SAH</h3>
-<p>Another key data structure is the BVH. Each node stores the
-left&amp;right leaf or the triangles it contains.</p>
-<figure>
-<a href="image-20231021202051347.png" title="BVH Structure" class="gallery-item"><img src="image-20231021202051347.png" alt="BVH Structure"></a>
-<figcaption aria-hidden="true">BVH Structure</figcaption>
-</figure>
-<p>It is hot topic about how could we best split each BVH node so to
-have a good balance and simplicity. A good BVH node should best describe
-how the information inside is locates. And <strong>SAH (Surface Area
-Heuristic)</strong> is a good approach to achieve this point. The
-principle of this algorithm is to avoid overlapping of each bounding
-box.</p>
-<figure>
-<a href="v2-368f2e2bd56ff110a068dc8478756bbc_b.jpg" title="SAH" class="gallery-item"><img src="v2-368f2e2bd56ff110a068dc8478756bbc_b.jpg" alt="SAH"></a>
-<figcaption aria-hidden="true">SAH</figcaption>
-</figure>
-<p>The higher SAH value we get, the more efficient for each ray to hit
-object. So to find the best SAH split points, I actually run all the
-possible slice points on each axis and get the highest value. I sliced
-the volume into 10 sub-volume. and compare each value to find the
-best.</p>
-<figure>
-<a href="image-20231022184238123.png" title="image-20231022184238123" class="gallery-item"><img src="image-20231022184238123.png" alt="image-20231022184238123"></a>
-<figcaption aria-hidden="true">image-20231022184238123</figcaption>
-</figure>
-<h3 id="transverse-bvh-and-gpu">Transverse BVH and GPU</h3>
-<p>since the number of triangles in each BVH leaf is uncertain, some may
-have 2 or 3 some may even have 100 + (when the depth is higher than 60).
-So when the BVH node reference the triangles, I store the starting
-offset in trianglesBuffer and the counts of triangles. This method not
-only make triangles trackable but also increase the data continuity on
-buffer.</p>
-<figure>
-<a href="image-20231022193318082.png" title="nodes to triangles" class="gallery-item"><img src="image-20231022193318082.png" alt="nodes to triangles"></a>
-<figcaption aria-hidden="true">nodes to triangles</figcaption>
-</figure>
-<p>if the node is not leaf node, then the "offset" and "length" is
-corresponding map to the "left" and "right" nodes index.</p>
-<figure>
-<a href="image-20231022193029512.png" title="nodes to left and right" class="gallery-item"><img src="image-20231022193029512.png" alt="nodes to left and right"></a>
-<figcaption aria-hidden="true">nodes to left and right</figcaption>
-</figure>
-<p>as for how triangles are linking to geometry data, there is the
-graph. The triangle, which stores the corresponding Object ID, Material
-ID and three vertices info.</p>
-<figure>
-<a href="image-20231021201916498.png" title="triangle" class="gallery-item"><img src="image-20231021201916498.png" alt="triangle"></a>
-<figcaption aria-hidden="true">triangle</figcaption>
-</figure>
-<h2 id="ray-hit">Ray Hit</h2>
-<h3 id="ray-hit-with-bvh">Ray hit with BVH</h3>
-<p>Hit with BVHnode is done by "AABB intersect", here is the code. The
-idea is very simple, we check the period hit into3 axis. if these period
-exist overlapping between each of axis, which means hit, if not then
-miss.</p>
-<figure>
-<a href="image-20231022194929645.png" title="example in 2D" class="gallery-item"><img src="image-20231022194929645.png" alt="example in 2D"></a>
-<figcaption aria-hidden="true">example in 2D</figcaption>
-</figure>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/css/lightgallery.min.css" /><div class=".article-gallery"><h1 id="A-Realtime-RayTracing-Renderer-in-Unity"><a href="#A-Realtime-RayTracing-Renderer-in-Unity" class="headerlink" title="A Realtime RayTracing Renderer in Unity"></a>A Realtime RayTracing Renderer in Unity</h1><p>I implemented this renderer during Fall Break in 2023, with my strong interest to immigrate more algorithm in GPU. </p>
+<p>Here are some results I achieved. Everything is rendered in real-time.  Here are some results.</p>
+<p><a href="BVHDemo.gif" title="BVHDemo" class="gallery-item"><img src="BVHDemo.gif" alt="BVHDemo"></a></p>
+<p>My renderer currently supports SAH BVH construction on CPU and visualization (as the grey boxes you can see) . It also supports reading unity legacy materials and transfer them into Raytracing property. The algorithm using compute shader to run ray tracing method on GPU.</p>
+<p><a href="BVHDemoMaterials.gif" title="BVHDemoMaterials" class="gallery-item"><img src="BVHDemoMaterials.gif" alt="BVHDemoMaterials"></a></p>
+<p>I majorly take this <a target="_blank" rel="noopener" href="http://three-eyed-games.com/2018/05/03/gpu-ray-tracing-in-unity-part-1/">reference</a> from  David Kuri. I implemented my own way building BVH and raytracing on GPU. </p>
+<h2 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h2><p>Render Pipeline. The graph show how do compute </p>
+<p><a href="image-20231022175542901.png" title="Render Pipeline" class="gallery-item"><img src="image-20231022175542901.png" alt="Render Pipeline"></a></p>
+<p>The graph below shows how do we collect data from each objects and store it into corresponding GPU Buffers.</p>
+<p><a href="image-20231021201713042.png" title="Data Transfer" class="gallery-item"><img src="image-20231021201713042.png" alt="Data Transfer"></a></p>
+<h3 id="Build-BVH-with-SAH"><a href="#Build-BVH-with-SAH" class="headerlink" title="Build BVH with SAH"></a>Build BVH with SAH</h3><p>Another key data structure is the BVH. Each node stores the left&amp;right leaf or the triangles it contains.</p>
+<p><a href="image-20231021202051347.png" title="BVH Structure" class="gallery-item"><img src="image-20231021202051347.png" alt="BVH Structure"></a></p>
+<p>It is hot topic about how could we best split each BVH node so to have a good balance and simplicity. A good BVH node should best describe how the information inside is locates. And <strong>SAH (Surface Area Heuristic)</strong> is a good approach to achieve this point. The principle of this algorithm is to avoid overlapping of each bounding box. </p>
+<p><a href="v2-368f2e2bd56ff110a068dc8478756bbc_b.jpg" title="SAH" class="gallery-item"><img src="v2-368f2e2bd56ff110a068dc8478756bbc_b.jpg" alt="SAH"></a></p>
+<p>The higher SAH value we get, the more efficient for each ray to hit object. So to find the best SAH split points, I actually run all the possible slice points on each axis and get the highest value. I sliced the volume into 10 sub-volume. and compare each value to find the best.</p>
+<p><a href="image-20231022184238123.png" title="image-20231022184238123" class="gallery-item"><img src="image-20231022184238123.png" alt="image-20231022184238123"></a></p>
+<h3 id="Transverse-BVH-and-GPU"><a href="#Transverse-BVH-and-GPU" class="headerlink" title="Transverse BVH and GPU"></a>Transverse BVH and GPU</h3><p>since the number of triangles in each BVH leaf is uncertain, some may have 2 or 3 some may even have 100 + (when the depth is higher than 60). So when the BVH node reference the triangles, I store the starting offset in trianglesBuffer and the counts of triangles. This method not only make triangles trackable but also increase the data continuity on buffer.</p>
+<p><a href="image-20231022193318082.png" title="nodes to triangles" class="gallery-item"><img src="image-20231022193318082.png" alt="nodes to triangles"></a></p>
+<p>if the node is not leaf node, then the “offset” and “length” is corresponding map to the “left” and “right” nodes index.</p>
+<p><a href="image-20231022193029512.png" title="nodes to left and right" class="gallery-item"><img src="image-20231022193029512.png" alt="nodes to left and right"></a></p>
+<p>as for how triangles are linking to geometry data, there is the graph. The triangle, which stores the corresponding Object ID, Material ID and three vertices info.</p>
+<p><a href="image-20231021201916498.png" title="triangle" class="gallery-item"><img src="image-20231021201916498.png" alt="triangle"></a></p>
+<h2 id="Ray-Hit"><a href="#Ray-Hit" class="headerlink" title="Ray Hit"></a>Ray Hit</h2><h3 id="Ray-hit-with-BVH"><a href="#Ray-hit-with-BVH" class="headerlink" title="Ray hit with BVH"></a>Ray hit with BVH</h3><p>Hit with BVHnode is done by “AABB intersect”, here is the code. The idea is very simple, we check the period hit into3 axis. if these period exist overlapping between each of axis, which means hit, if not then miss.</p>
+<p><a href="image-20231022194929645.png" title="example in 2D" class="gallery-item"><img src="image-20231022194929645.png" alt="example in 2D"></a></p>
 <pre class="line-numbers language-c#" data-language="c#"><code class="language-c#">tmin = (bot.x - r.origin.x) * r.invDir.x;
 tmax = (top.x - r.origin.x) * r.invDir.x;
 if (tmin &gt; tmax) { // swap
@@ -321,18 +252,15 @@ tmax = min(tmax, tzmax);
 
 t = float2(tmin, tmax);
 return true;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="rayhit-with-triangle">RayHit with Triangle</h3>
-<p>I use the Aronberg method to fast calculate the triangle hit. You can
-find it in this <a target="_blank" rel="noopener" href="http://www.graphics.cornell.edu/pubs/1997/MT97.pdf">paper</a>.</p>
-<p><a href="image-20231023020204191.png" class="gallery-item"><img src="image-20231023020204191.png"></a></p>
-<p><a href="image-20231023020230897.png" class="gallery-item"><img src="image-20231023020230897.png"></a></p>
-<h2 id="result">Result</h2>
-<p><a href="image-20231023020311240.png" class="gallery-item"><img src="image-20231023020311240.png"></a></p>
-<p><a href="image-20231023020318274.png" class="gallery-item"><img src="image-20231023020318274.png"></a></p>
-<p><a href="image-20231023020358473.png" class="gallery-item"><img src="image-20231023020358473.png"></a></p>
-<p><a href="image-20231023020420418.png" class="gallery-item"><img src="image-20231023020420418.png"></a></p>
-<p><a href="image-20231023020433843.png" class="gallery-item"><img src="image-20231023020433843.png"></a></p>
-<p><a href="rayTracingOnGPU/image-20231023020444758.png" class="gallery-item"><img src="rayTracingOnGPU/image-20231023020444758.png"></a><a href="rayTracingOnGPU/image-20231023020507235.png" class="gallery-item"><img src="rayTracingOnGPU/image-20231023020507235.png"></a></p>
+<h3 id="RayHit-with-Triangle"><a href="#RayHit-with-Triangle" class="headerlink" title="RayHit with Triangle"></a>RayHit with Triangle</h3><p>I use the Aronberg method to fast calculate the triangle hit. You can find it in this <a target="_blank" rel="noopener" href="http://www.graphics.cornell.edu/pubs/1997/MT97.pdf">paper</a>.</p>
+<p><a href="image-20231023020204191.png" class="gallery-item"><img src="image-20231023020204191.png" alt=""></a></p>
+<p><a href="image-20231023020230897.png" class="gallery-item"><img src="image-20231023020230897.png" alt=""></a></p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><p><a href="image-20231023020311240.png" class="gallery-item"><img src="image-20231023020311240.png" alt=""></a></p>
+<p><a href="image-20231023020318274.png" class="gallery-item"><img src="image-20231023020318274.png" alt=""></a></p>
+<p><a href="image-20231023020358473.png" class="gallery-item"><img src="image-20231023020358473.png" alt=""></a></p>
+<p><a href="image-20231023020420418.png" class="gallery-item"><img src="image-20231023020420418.png" alt=""></a></p>
+<p><a href="image-20231023020433843.png" class="gallery-item"><img src="image-20231023020433843.png" alt=""></a></p>
+<p><a href="rayTracingOnGPU/image-20231023020444758.png" class="gallery-item"><img src="image-20231023020444758.png" alt=""></a><a href="rayTracingOnGPU/image-20231023020507235.png" class="gallery-item"><img src="image-20231023020507235.png" alt=""></a></p>
 </div><script src="https://cdn.jsdelivr.net/lightgallery.js/1.0.1/js/lightgallery.min.js"></script><script src="https://github.com/sachinchoolur/lg-thumbnail.js"></script><script src="https://github.com/sachinchoolur/lg-zoom.js"></script><script src="https://github.com/sachinchoolur/lg-autoplay.js"></script><script src="https://github.com/sachinchoolur/lg-fullscreen.js"></script><script src="https://github.com/sachinchoolur/lg-pager.js"></script><script src="https://github.com/sachinchoolur/lg-video.js"></script><script src="https://github.com/sachinchoolur/lg-hash.js"></script><script>if (typeof lightGallery !== 'undefined') {
         var options = {
             selector: '.gallery-item'
